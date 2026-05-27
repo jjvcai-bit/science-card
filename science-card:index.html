@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Science Card — Spend with purpose. Fund discovery.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0922;
+    --bg-elev: #15102e;
+    --bg-card: #1c1538;
+    --bg-deep: #0a0618;
+    --line: #2a2348;
+    --line-bright: #3d3360;
+    --text: #f5f0ff;
+    --text-dim: #a89ec9;
+    --text-mute: #6e6593;
+    --pink: #fe0092;
+    --pink-bright: #ff2da6;
+    --magenta: #e100bf;
+    --pink-soft: rgba(254, 0, 146, 0.15);
+    --zebec-green: #4dd4a6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .ambient::before {
+    content: ''; position: absolute;
+    top: -300px; left: -200px;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(254, 0, 146, 0.18) 0%, transparent 60%);
+    filter: blur(40px);
+  }
+  .ambient::after {
+    content: ''; position: absolute;
+    top: 20%; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(225, 0, 191, 0.15) 0%, transparent 60%);
+    filter: blur(40px);
+  }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14, 9, 34, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .logo-mark {
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 100%; height: 100%; }
+  .logo-text {
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--text); padding: 8px 16px;
+    border-radius: 100px; font-size: 13px; font-weight: 500;
+    text-decoration: none; border: 1px solid var(--line-bright);
+    transition: border-color 0.15s;
+  }
+  .nav-cta:hover { border-color: var(--zebec-green); }
+  .zebec-badge {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: var(--zebec-green);
+    box-shadow: 0 0 8px rgba(77, 212, 166, 0.4);
+  }
+
+  .hero { padding: 80px 0 100px; position: relative; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 14px; background: var(--pink-soft);
+    border: 1px solid rgba(254, 0, 146, 0.3);
+    border-radius: 100px; font-size: 12px;
+    color: var(--pink-bright); margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px; background: var(--pink);
+    border-radius: 50%; box-shadow: 0 0 8px var(--pink);
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: clamp(52px, 9vw, 124px); line-height: 0.95;
+    letter-spacing: -0.035em; margin-bottom: 36px;
+    max-width: 1000px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--pink), var(--magenta));
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+  .hero-sub {
+    font-size: 20px; color: var(--text-dim);
+    max-width: 620px; margin-bottom: 48px; line-height: 1.55;
+  }
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(3, auto); gap: 50px;
+    padding-top: 36px; border-top: 1px solid var(--line);
+    max-width: 700px;
+  }
+  .hero-meta-label {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-mute); margin-bottom: 8px;
+  }
+  .hero-meta-val {
+    font-family: 'Instrument Serif', serif; font-size: 22px;
+    color: var(--text); line-height: 1.2;
+  }
+
+  section { padding: 100px 0; position: relative; }
+  .section-eyebrow {
+    font-size: 12px; color: var(--pink); margin-bottom: 18px;
+    letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-eyebrow::before {
+    content: ''; width: 30px; height: 1px; background: var(--pink);
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: clamp(36px, 5.5vw, 68px); letter-spacing: -0.025em;
+    line-height: 1.02; margin-bottom: 28px; max-width: 900px;
+  }
+  .section-title em { font-style: italic; color: var(--pink); }
+  .section-lede {
+    font-size: 18px; color: var(--text-dim);
+    max-width: 680px; line-height: 1.6; margin-bottom: 60px;
+  }
+
+  .mission-grid {
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: 80px; align-items: start;
+  }
+  .mission-text { font-size: 17px; line-height: 1.7; color: var(--text-dim); }
+  .mission-text p { margin-bottom: 20px; }
+  .mission-text strong { color: var(--text); font-weight: 600; }
+  .quote-card {
+    background: linear-gradient(135deg, rgba(254, 0, 146, 0.08), rgba(225, 0, 191, 0.04));
+    border: 1px solid rgba(254, 0, 146, 0.25);
+    border-radius: 16px; padding: 40px;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"'; position: absolute; top: -20px; left: 20px;
+    font-family: 'Instrument Serif', serif; font-size: 140px;
+    color: rgba(254, 0, 146, 0.2); line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: 24px; line-height: 1.35;
+    color: var(--text); margin-bottom: 24px; position: relative;
+  }
+  .quote-attr {
+    padding-top: 20px; border-top: 1px solid rgba(254, 0, 146, 0.2);
+    font-size: 13px; color: var(--text-dim);
+  }
+  .quote-attr strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+  .stats-section {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-deep);
+  }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 50px 30px; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 6vw, 72px); line-height: 1;
+    letter-spacing: -0.03em; color: var(--text); margin-bottom: 12px;
+  }
+  .stat-num em { color: var(--pink); font-style: italic; }
+  .stat-label {
+    font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-mute);
+  }
+
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .how-card {
+    background: var(--bg-card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 36px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .how-card:hover { border-color: var(--pink); transform: translateY(-3px); }
+  .how-num {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: 14px; color: var(--pink); margin-bottom: 28px;
+  }
+  .how-title {
+    font-family: 'Instrument Serif', serif; font-size: 30px;
+    line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 16px; color: var(--text);
+  }
+  .how-desc { font-size: 15px; line-height: 1.6; color: var(--text-dim); }
+
+  .uni-section {
+    background: var(--bg-deep);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 70px 0;
+  }
+  .uni-label {
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-mute); text-align: center; margin-bottom: 36px;
+  }
+  .uni-list {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 30px;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: clamp(20px, 2.3vw, 28px);
+    color: var(--text); max-width: 1100px; margin: 0 auto;
+  }
+  .uni-list span:hover { color: var(--pink); }
+
+  .acq-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 60px; align-items: start;
+  }
+  .acq-side { position: sticky; top: 100px; }
+  .acq-body { font-size: 16px; line-height: 1.7; color: var(--text-dim); }
+  .acq-body p { margin-bottom: 20px; }
+  .acq-body strong { color: var(--text); }
+
+  .cta-section { padding: 120px 0; text-align: center; position: relative; }
+  .cta-section::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(254, 0, 146, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(40px, 6vw, 80px); font-style: italic;
+    line-height: 1.05; letter-spacing: -0.025em;
+    margin-bottom: 24px; position: relative;
+  }
+  .cta-sub {
+    font-size: 18px; color: var(--text-dim);
+    max-width: 540px; margin: 0 auto 36px; position: relative;
+  }
+  .cta-actions {
+    display: inline-flex; gap: 12px; flex-wrap: wrap;
+    justify-content: center; position: relative;
+  }
+  .btn-primary {
+    background: var(--pink); color: white; padding: 14px 28px;
+    border-radius: 100px; font-weight: 600; font-size: 14px;
+    text-decoration: none; border: 1px solid var(--pink);
+    transition: all 0.2s; box-shadow: 0 8px 32px rgba(254, 0, 146, 0.3);
+  }
+  .btn-primary:hover {
+    background: var(--pink-bright);
+    box-shadow: 0 8px 40px rgba(254, 0, 146, 0.5);
+  }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    padding: 14px 28px; border-radius: 100px;
+    border: 1px solid var(--line-bright);
+    font-weight: 500; font-size: 14px; text-decoration: none;
+  }
+
+  footer {
+    background: var(--bg-deep);
+    border-top: 1px solid var(--line);
+    padding: 70px 0 30px;
+  }
+  .foot-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 50px; padding-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .foot-brand-desc {
+    font-size: 14px; color: var(--text-dim);
+    max-width: 380px; margin-top: 18px; line-height: 1.6;
+  }
+  .foot-col-label {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-mute); margin-bottom: 16px; font-weight: 600;
+  }
+  .foot-col a {
+    display: block; color: var(--text-dim); text-decoration: none;
+    margin-bottom: 10px; font-size: 14px; transition: color 0.15s;
+  }
+  .foot-col a:hover { color: var(--pink); }
+  .foot-bottom {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text-mute);
+    flex-wrap: wrap; gap: 12px; align-items: center;
+  }
+  .zebec-lockup {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-dim);
+  }
+
+  @media (max-width: 900px) {
+    .wrap { padding: 0 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 0; }
+    .hero { padding: 40px 0 60px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 20px; }
+    .mission-grid, .acq-grid { grid-template-columns: 1fr; gap: 30px; }
+    .how-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat { border-right: none; border-bottom: 1px solid var(--line); padding: 36px 20px; }
+    .stat:nth-child(odd) { border-right: 1px solid var(--line); }
+    .acq-side { position: static; }
+    .foot-top { grid-template-columns: 1fr 1fr; gap: 30px; }
+    .uni-list { justify-content: center; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <!-- Science Card icon, extracted from official SVG -->
+        <svg viewBox="0 0 235 240" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FE0092" d="M227.2,118.5c0,46.9-34.3,85.7-79.1,92.9c36-10.7,62.3-44.1,62.3-83.6c0-48.1-39-87.2-87.2-87.2 c-37.8,0-70,24-82,57.7c9.2-42.3,46.9-73.9,91.9-73.9C185.1,24.4,227.2,66.6,227.2,118.5z"/>
+          <path fill="#E100BF" d="M118.1,96.3c-0.4,0.5-27.9,31-80.5,43c-0.7-4.4-1-8.9-1-13.5c0-2.4,0.1-4.9,0.3-7.2 C50.8,119.9,76.1,117.1,118.1,96.3z"/>
+          <path fill="#E100BF" d="M150.2,91.4c-29.3,55-86.6,85.2-94.9,89.3c-4.6-5.9-8.4-12.4-11.4-19.3C116.1,138.9,149.7,92.1,150.2,91.4z"/>
+          <path fill="#E100BF" d="M154.1,119.7c-0.3,0.9-17.6,51.1-63.7,88.4c-6.7-2.9-13-6.6-18.7-11C77.1,194.3,127.5,168.2,154.1,119.7z"/>
+          <path fill="#E100BF" d="M37.6,139.3c-0.7-4.4-1-8.9-1-13.5c0-2.4,0.1-4.9,0.3-7.2c14,1.4,39.2-1.4,81.3-22.2 C117.7,96.8,90.2,127.3,37.6,139.3z"/>
+          <path fill="#E100BF" d="M55.4,180.7c-4.6-5.9-8.4-12.4-11.4-19.3c72.1-22.5,105.8-69.3,106.3-70C120.9,146.4,63.6,176.6,55.4,180.7z"/>
+        </svg>
+      </div>
+      <span class="logo-text">Science Card</span>
+    </a>
+    <div class="nav-links">
+      <a href="#mission">Mission</a>
+      <a href="#how">How it works</a>
+      <a href="#universities">Universities</a>
+      <a href="#zebec">Zebec</a>
+    </div>
+    <a href="https://www.zebec.io" class="nav-cta">
+      <span class="zebec-badge"></span>
+      A Zebec Network Company
+    </a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Now part of Zebec Network · Est. London 2021
+    </div>
+    <h1>Spend with purpose.<br><em>Fund discovery.</em></h1>
+    <p class="hero-sub">
+      Science Card is the UK card platform built for academia — a financial tool that channels a portion of every transaction toward funded, peer-reviewed university research. Students, researchers, and university staff spend the way they already do. Science gets the money it needs.
+    </p>
+    <div class="hero-meta">
+      <div>
+        <div class="hero-meta-label">Issued by</div>
+        <div class="hero-meta-val">Mastercard</div>
+      </div>
+      <div>
+        <div class="hero-meta-label">Reach</div>
+        <div class="hero-meta-val">50,000+ students</div>
+      </div>
+      <div>
+        <div class="hero-meta-label">Universities</div>
+        <div class="hero-meta-val">Top 10 in the UK</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="mission">
+  <div class="wrap">
+    <div class="section-eyebrow">01 — Mission</div>
+    <h2 class="section-title">Built to remove financial barriers in <em>academia.</em></h2>
+    <div class="mission-grid">
+      <div class="mission-text">
+        <p>The UK is a world leader in research. But its researchers spend too much of their time chasing increasingly hard-won funding instead of doing the work that matters.</p>
+        <p>Science Card was founded by <strong>Daniel Baeriswyl</strong>, a former Biomedical Engineering PhD student at UCL, who experienced firsthand the impact of academic funding constraints — and built a way for consumer spending to power scientific research.</p>
+        <p>Users round up everyday transactions, choose which research projects to support, and follow the work as it progresses. Science Card pledges <strong>10% of its profits</strong> directly into university research alongside user contributions.</p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">Science Card was built to remove financial barriers in academia. With Zebec's technology, infrastructure and on-and-off crypto rails, our mission evolves — capable to deliver next-generation stablecoin streaming payment solutions to campuses worldwide.</div>
+        <div class="quote-attr">
+          <strong>Daniel Baeriswyl</strong>
+          Founder, Science Card
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-section">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num">50K<em>+</em></div>
+        <div class="stat-label">Students reached</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10</div>
+        <div class="stat-label">Top UK universities</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10<em>%</em></div>
+        <div class="stat-label">Of profits to research</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2021</div>
+        <div class="stat-label">Founded in London</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-eyebrow">02 — How it works</div>
+    <h2 class="section-title">A current account that <em>funds breakthroughs.</em></h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">i.</div>
+        <div class="how-title">Open an account</div>
+        <div class="how-desc">A free Science Card e-account with a Mastercard debit card, an app for financial management, support for domestic and international payments — plus instant transfers between Science Card users.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">ii.</div>
+        <div class="how-title">Spend as you would</div>
+        <div class="how-desc">Use the card for everyday purchases. Transactions automatically round up — the difference is funneled into research projects you've chosen to support across UK universities.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">iii.</div>
+        <div class="how-title">Follow the science</div>
+        <div class="how-desc">Pick research areas that matter to you — from dementia and cervical cancer to kidney transplants, climate, and aerospace. Receive direct updates from the academics doing the work.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="uni-section" id="universities">
+  <div class="wrap">
+    <div class="uni-label">— Supporting research at —</div>
+    <div class="uni-list">
+      <span>Cambridge</span>
+      <span>King's College London</span>
+      <span>UCL</span>
+      <span>Newcastle</span>
+      <span>Kingston</span>
+      <span>Aston</span>
+    </div>
+  </div>
+</div>
+
+<section id="zebec">
+  <div class="wrap">
+    <div class="section-eyebrow">03 — The Zebec Acquisition</div>
+    <h2 class="section-title">Joining Zebec Network. <em>Going global.</em></h2>
+    <div class="acq-grid">
+      <div class="acq-side">
+        <div class="quote-card">
+          <div class="quote-text">Science Card's commitment to academic finance aligns perfectly with our mission to make payments seamless and inclusive. Adding their mission card to our payroll and crypto card offerings creates a trifecta of financial empowerment for diverse users.</div>
+          <div class="quote-attr">
+            <strong>Simon Babakhani</strong>
+            COO, Zebec Network
+          </div>
+        </div>
+      </div>
+      <div class="acq-body">
+        <p><strong>London, UK &amp; New York, NY — May 29, 2025.</strong> Zebec Network, a Solana-based blockchain payment network, acquired the assets of Science Card, Ltd, the UK university card platform dedicated to simplifying university research finance.</p>
+        <p>The acquisition adds Science Card's mission-driven card to Zebec's broader card program — which already spans payroll pay cards and non-custodial crypto debit cards. Together they form a trifecta: payroll, crypto, and mission.</p>
+        <p>For Science Card, joining Zebec means global reach. Zebec's payment infrastructure brings next-generation stablecoin streaming payments to campuses worldwide — closing the loop between consumer spending in the UK and on-chain settlement everywhere else.</p>
+        <p>For Zebec, the acquisition positions the company across <strong>EdTech, DeSci, and FinTech</strong> — and gives it a presence in the UK higher-education market, with relationships already established at some of the country's most prominent institutions.</p>
+        <p style="margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 14px;">
+          <strong>Press inquiries:</strong> <a href="mailto:press@zebec.io" style="color: var(--pink); text-decoration: none;">press@zebec.io</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <div class="wrap">
+    <h2 class="cta-title">Supporting science, simply by spending.</h2>
+    <p class="cta-sub">Join 50,000+ students and researchers turning everyday transactions into research funding for UK universities.</p>
+    <div class="cta-actions">
+      <a href="https://x.com/ScienceCardUK" class="btn-primary">Follow on X →</a>
+      <a href="https://www.zebec.io" class="btn-secondary">Learn about Zebec Network</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="logo" style="cursor: default;">
+          <div class="logo-mark">
+            <svg viewBox="0 0 235 240" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FE0092" d="M227.2,118.5c0,46.9-34.3,85.7-79.1,92.9c36-10.7,62.3-44.1,62.3-83.6c0-48.1-39-87.2-87.2-87.2 c-37.8,0-70,24-82,57.7c9.2-42.3,46.9-73.9,91.9-73.9C185.1,24.4,227.2,66.6,227.2,118.5z"/>
+              <path fill="#E100BF" d="M118.1,96.3c-0.4,0.5-27.9,31-80.5,43c-0.7-4.4-1-8.9-1-13.5c0-2.4,0.1-4.9,0.3-7.2 C50.8,119.9,76.1,117.1,118.1,96.3z"/>
+              <path fill="#E100BF" d="M150.2,91.4c-29.3,55-86.6,85.2-94.9,89.3c-4.6-5.9-8.4-12.4-11.4-19.3C116.1,138.9,149.7,92.1,150.2,91.4z"/>
+              <path fill="#E100BF" d="M154.1,119.7c-0.3,0.9-17.6,51.1-63.7,88.4c-6.7-2.9-13-6.6-18.7-11C77.1,194.3,127.5,168.2,154.1,119.7z"/>
+              <path fill="#E100BF" d="M37.6,139.3c-0.7-4.4-1-8.9-1-13.5c0-2.4,0.1-4.9,0.3-7.2c14,1.4,39.2-1.4,81.3-22.2 C117.7,96.8,90.2,127.3,37.6,139.3z"/>
+              <path fill="#E100BF" d="M55.4,180.7c-4.6-5.9-8.4-12.4-11.4-19.3c72.1-22.5,105.8-69.3,106.3-70C120.9,146.4,63.6,176.6,55.4,180.7z"/>
+            </svg>
+          </div>
+          <span class="logo-text">Science Card</span>
+        </div>
+        <div class="foot-brand-desc">The UK card platform that channels everyday spending into university research. Now part of Zebec Network.</div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-label">Company</div>
+        <a href="#mission">Mission</a>
+        <a href="#how">How it works</a>
+        <a href="#universities">Universities</a>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-label">Zebec</div>
+        <a href="#zebec">Acquisition</a>
+        <a href="https://www.zebec.io">zebec.io</a>
+        <a href="mailto:press@zebec.io">Press</a>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-label">Connect</div>
+        <a href="https://x.com/ScienceCardUK">X / Twitter</a>
+        <a href="https://x.com/Zebec_HQ">Zebec on X</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2025 Science Card, Ltd.</div>
+      <div class="zebec-lockup">
+        <span class="zebec-badge"></span>
+        A Zebec Network Company
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
